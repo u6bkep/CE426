@@ -54,11 +54,11 @@ uint32_t findHighBitC(uint32_t* array, uint32_t nelements)
 	{
 		bitmask = 0x80000000;
 		//bitmask = 1;
-		for(j = 32; j > 0; j--)
+		for(j = 0; j <= 32; j++)
 		{
  			if(array[i - 1] & bitmask)
 			{
-				returnvalue = 255 - ((8 - i) * 32) - (32 - j);
+				returnvalue = 255 - ((8 - i) * 32) - j;
 				bitmask = returnvalue;
 				return returnvalue;
 			}
