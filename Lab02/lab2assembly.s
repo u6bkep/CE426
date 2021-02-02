@@ -13,5 +13,26 @@
 ; Last modified: 01/28/2021 12:20 PM
 ;**********************************************************************
 
-	EXPORT lab2main
+
+	AREA data
+	
 		
+bitmask EQU 0x80000000
+	
+	AREA    |.text|, CODE, READONLY
+	EXPORT findHighBitASM
+				
+findHighBitASM
+	;r12 = i
+	;r11 = j
+	;r10 = bitmask
+	MOV R12, R0
+	MOV R11, #0
+	
+loop1
+	LDR R10, =bitmask
+	
+	
+	
+	
+	END

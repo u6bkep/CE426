@@ -437,6 +437,11 @@
               <FileType>1</FileType>
               <FilePath>.\lab2main.c</FilePath>
             </File>
+            <File>
+              <FileName>lab2assembly.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\lab2assembly.s</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
