@@ -35,8 +35,8 @@ int main(void){
 	volatile int position;
 	for (i = 0; i<narrays; i++)
 	{
-		//position = findHighBitASM(arrays[i], nelements);
-		position = findHighBitC(arrays[i], nelements);
+		position = findHighBitASM(arrays[i], nelements);
+		//position = findHighBitC(arrays[i], nelements);
 		arrayAnswers[i] = position;
 	}
 	
@@ -58,7 +58,7 @@ uint32_t findHighBitC(uint32_t* array, uint32_t nelements)
 		{
  			if(array[i - 1] & bitmask)
 			{
-				returnvalue = 255 - ((8 - i) * 32) - j;
+				returnvalue = 32*i-1-j; // 255 - ((8 - i) * 32) - j
 				bitmask = returnvalue;
 				return returnvalue;
 			}
