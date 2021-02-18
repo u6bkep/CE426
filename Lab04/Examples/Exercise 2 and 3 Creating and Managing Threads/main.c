@@ -37,8 +37,10 @@ void led_thread1 (void const *argument)
 	{
 		LED_On(1);                          
 		osDelay(100);
+		//delay(500);
 		LED_Off(1);
 		osDelay(100);
+		//delay(500);
 	}
 }
 
@@ -51,8 +53,10 @@ void led_thread2 (void const *argument)
 	{
 		LED_On(2);                          
 		osDelay(200);
+		//delay(500);
 		LED_Off(2);
 		osDelay(200);
+		//delay(500);
 	}
 }
 
