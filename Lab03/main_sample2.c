@@ -80,17 +80,17 @@ int main()
 					
 				  break;
 				case 1:										//normal mode
-					LED_On(LED_0);
+					LED_Off(LED_0);
 				  LED_Off(LED_1);
-				  LED_Off(LED_2);
+				  LED_On(LED_2);
 				  delay(3000);
 				  LED_Off(LED_0);
 				  LED_On(LED_1);
 				  LED_Off(LED_2);
 				  delay(1000);
-				  LED_Off(LED_0);
+				  LED_On(LED_0);
 				  LED_Off(LED_1);
-				  LED_On(LED_2);
+				  LED_Off(LED_2);
 				  delay(3000);
 				  break;
 				case 2:										//overide mode
