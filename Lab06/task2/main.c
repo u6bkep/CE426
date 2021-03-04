@@ -65,17 +65,17 @@ void Thread1 (void const *argument)
  *---------------------------------------------------------------------------*/
 void Thread2 (void const *argument) 
 {
-	int state = 0;
+	int state = 2;
 	osEvent  result;
 	for (;;) 
 	{
-		result = osSignalWait (0x00,0);
+		
 		switch(result.value.v)
 		{
-			case 1:
+			case 0x1:
 				state = 1;
 				break;
-			case 2:
+			case 0x2:
 				state = 2;
 				break;
 			default:
@@ -97,12 +97,13 @@ void Thread2 (void const *argument)
 				LED_Off(LED_1);
 				LED_Off(LED_2);
 				osDelay(3000);
+				result = osSignalWait (0x00,0);
 			  osMutexRelease(led_mutex);
 				break;
 			case 2:
 			default:
-				osSignalWait (0x01,osWaitForever);
-				state = 1;
+				result = osSignalWait (0x00,osWaitForever);
+				//state = 1;
 				break;
 		}
 	}
@@ -110,17 +111,17 @@ void Thread2 (void const *argument)
 
 void Thread3 (void const *argument) 
 {
-	int state = 0;
+	int state = 2;
 	osEvent  result;
 	for (;;) 
 	{
-		result = osSignalWait (0x00,0);
+		
 		switch(result.value.v)
 		{
-			case 1:
+			case 0x1:
 				state = 1;
 				break;
-			case 2:
+			case 0x2:
 				state = 2;
 				break;
 			default:
@@ -136,12 +137,13 @@ void Thread3 (void const *argument)
 				osDelay(1000);
 				LED_Off(LED_0);
 				osDelay(1000);
+			  result = osSignalWait (0x00,0);
 			  osMutexRelease(led_mutex);
 				break;
 			case 2:
 			default:
-				osSignalWait (0x01,osWaitForever);
-				state = 1;
+				result = osSignalWait (0x00,osWaitForever);
+				//state = 1;
 				break;
 		}
 	}
