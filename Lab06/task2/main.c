@@ -101,7 +101,8 @@ void Thread2 (void const *argument)
 				break;
 			case 2:
 			default:
-				
+				osSignalWait (0x01,osWaitForever);
+				state = 1;
 				break;
 		}
 	}
@@ -139,7 +140,8 @@ void Thread3 (void const *argument)
 				break;
 			case 2:
 			default:
-				
+				osSignalWait (0x01,osWaitForever);
+				state = 1;
 				break;
 		}
 	}
