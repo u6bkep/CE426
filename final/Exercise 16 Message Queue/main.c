@@ -63,6 +63,13 @@ void USART1_IRQHandler (void)
     uint8_t intKey = (int8_t) (USART1->DR & 0x1FF);
     osMessagePut(Q_uartQ1, intKey, 0);
     }
+		
+		void USART2_IRQHandler (void)
+    {
+        //send uart messages to message queue
+    uint8_t intKey = (int8_t) (USART2->DR & 0x1FF);
+    osMessagePut(Q_uartQ2, intKey, 0);
+    }
 
 /*----------------------------------------------------------------------------
   Main: Initialize and start RTX Kernel
@@ -80,6 +87,14 @@ int main (void)
     NVIC->ISER[USART1_IRQn/32] = 1UL << (USART1_IRQn%32);
     //set interrupt enable bit
     USART1->CR1 |= USART_CR1_RXNEIE;//enable USART receiver not empty interrupt
+	
+		//configure USART interrupt ... so we can read user inputs using interrupt
+    //Configure and enable USART1 interrupt
+    NVIC->ICPR[USART2_IRQn/32] = 1UL << (USART2_IRQn%32);  //clear any previous pending interrupt flag
+    NVIC->IP[USART2_IRQn] = 0x80;    //set priority to 0x80
+    NVIC->ISER[USART2_IRQn/32] = 1UL << (USART2_IRQn%32);
+    //set interrupt enable bit
+    USART2->CR1 |= USART_CR1_RXNEIE;//enable USART receiver not empty interrupt
 	
 	
 	Q_uartQ1 = osMessageCreate(osMessageQ(Q_uartQ1),NULL);					//create the message queue
