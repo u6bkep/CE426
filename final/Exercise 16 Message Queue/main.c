@@ -48,7 +48,7 @@ void uart1Thread (void const *argument)
     {
         // get input from uartIRQ and command worker threads appropriately
         uint8_t userInput = osMessageGet(Q_uartQ1,osWaitForever).value.v;
-        SendChar(userInput);
+        USART1SendChar(userInput);
 		}
 }
 
@@ -59,7 +59,7 @@ void uart2Thread (void const *argument)
     {
         // get input from uartIRQ and command worker threads appropriately
         uint8_t userInput = osMessageGet(Q_uartQ2,osWaitForever).value.v;
-        SendChar(userInput);
+        USART2SendChar(userInput);
 		}
 }
 
@@ -79,13 +79,6 @@ void USART1_IRQHandler (void)
     {
         //send uart messages to message queue
     uint8_t intKey = (int8_t) (USART2->DR & 0x1FF);
-    osMessagePut(Q_uartQ2, intKey, 0);
-    }
-
-void USART2_IRQHandler (void)
-    {
-        //send uart messages to message queue
-    uint8_t intKey = (int8_t) (USART1->DR & 0x1FF);
     osMessagePut(Q_uartQ2, intKey, 0);
     }
 

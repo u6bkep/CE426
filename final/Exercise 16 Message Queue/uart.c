@@ -51,7 +51,7 @@ void USART2_Init (void)
   SendChar
   Write character to Serial Port.
  *----------------------------------------------------------------------------*/
-int UART1SendChar (int ch)  {
+int USART1SendChar (int ch)  {
 
   while (!(USART1->SR & USART_SR_TXE));
   USART1->DR = (ch & 0x1FF);
@@ -59,7 +59,7 @@ int UART1SendChar (int ch)  {
   return (ch);
 }
 
-int UART2SendChar (int ch)  {
+int USART2SendChar (int ch)  {
 
   while (!(USART2->SR & USART_SR_TXE));
   USART2->DR = (ch & 0x1FF);
@@ -71,14 +71,14 @@ int UART2SendChar (int ch)  {
   GetKey
   Read character to Serial Port.
  *----------------------------------------------------------------------------*/
-int UART1GetKey (void)  {
+int USART1GetKey (void)  {
 
   while (!(USART1->SR & USART_SR_RXNE));
 
   return ((int)(USART1->DR & 0x1FF));
 }
 
-int UART2GetKey (void)  {
+int USART2GetKey (void)  {
 
   while (!(USART2->SR & USART_SR_RXNE));
 
