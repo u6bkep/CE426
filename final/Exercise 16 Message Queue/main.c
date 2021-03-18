@@ -44,13 +44,24 @@ osMailQId  (messageMail_pool_q_id);                 // Mail queue ID
 void uart1Thread (void const *argument) 
 {
 	//gets messages from the uart IRQ and collects them into larger messages for the handler thread
+	for (;;)
+    {
+        // get input from uartIRQ and command worker threads appropriately
+        uint8_t userInput = osMessageGet(Q_uartQ1,osWaitForever).value.v;
+        SendChar(userInput);
+		}
 }
 
 void uart2Thread (void const *argument) 
 {
 	//gets messages from the uart IRQ and collects them into larger messages for the handler thread
+	for (;;)
+    {
+        // get input from uartIRQ and command worker threads appropriately
+        uint8_t userInput = osMessageGet(Q_uartQ2,osWaitForever).value.v;
+        SendChar(userInput);
+		}
 }
-
 
 void messageHandlerThread (void const *argument) 
 {
@@ -71,6 +82,14 @@ void USART1_IRQHandler (void)
     osMessagePut(Q_uartQ2, intKey, 0);
     }
 
+void USART2_IRQHandler (void)
+    {
+        //send uart messages to message queue
+    uint8_t intKey = (int8_t) (USART1->DR & 0x1FF);
+    osMessagePut(Q_uartQ2, intKey, 0);
+    }
+
+		
 /*----------------------------------------------------------------------------
   Main: Initialize and start RTX Kernel
  *---------------------------------------------------------------------------*/
@@ -88,6 +107,7 @@ int main (void)
     //set interrupt enable bit
     USART1->CR1 |= USART_CR1_RXNEIE;//enable USART receiver not empty interrupt
 	
+	  USART2_Init ();
 		//configure USART interrupt ... so we can read user inputs using interrupt
     //Configure and enable USART1 interrupt
     NVIC->ICPR[USART2_IRQn/32] = 1UL << (USART2_IRQn%32);  //clear any previous pending interrupt flag
