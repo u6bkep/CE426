@@ -6,7 +6,6 @@
 *----------------------------------------------------------------------------*/
 #include "STM32F10x.h"
 #include "cmsis_os.h"
-
 #include "uart.h"
 
 osMessageQId Q_uartQ1;																		//define the message queue
@@ -30,6 +29,9 @@ osThreadId T_uart2Thread;
 osThreadId T_messageHandlerThread;
 osThreadId	T_main; 
 
+osMutexId uart_mutex;
+osMutexDef(uart_mutex);
+
 typedef struct {
   uint32_t length;
   uint32_t messagesRemaining;
@@ -40,6 +42,27 @@ typedef struct {
 osMailQDef (messageMail_pool_q, 10, messageMail_t);  // Declare mail queue
 osMailQId  (messageMail_pool_q_id);                 // Mail queue ID
 
+void SendText1(uint8_t *text) {
+	char USART1currentChar = text[0];
+	int i = 0;
+	while(USART1currentChar != 0)
+	{
+		USART1SendChar(USART1currentChar);
+		i++;
+		USART1currentChar = text[i];
+	}
+}
+
+void SendText2(uint8_t *text) {
+	char USART2currentChar = text[0];
+	int i = 0;
+	while(USART2currentChar != 0)
+	{
+		USART2SendChar(USART2currentChar);
+		i++;
+		USART2currentChar = text[i];
+	}
+}
 
 void uart1Thread (void const *argument) 
 {
@@ -63,9 +86,18 @@ void uart2Thread (void const *argument)
 		}
 }
 
-void messageHandlerThread (void const *argument) 
-{
-	//recieves messages from the uart recieve worker threads and sends messages out over the proper uart channels
+void messageHandlerThread (void const *argument) {
+    for (;;) {
+        osMutexWait(uart_mutex, osWaitForever);
+        
+			  SendText1("SEND MESSAGE:");
+				osMutexRelease(uart_mutex);  
+				//osDelay(2000);
+			
+			  SendText2("SEND MESSAGE:");
+        osMutexRelease(uart_mutex);
+        //osDelay(15000);
+    }
 }
 
 void USART1_IRQHandler (void)
@@ -114,6 +146,7 @@ int main (void)
 	Q_uartQ2 = osMessageCreate(osMessageQ(Q_uartQ2),NULL);
 	messageMail_pool_q_id = osMailCreate(osMailQ(messageMail_pool_q), NULL);
 	
+	uart_mutex = osMutexCreate(osMutex(uart_mutex));
 	T_uart1Thread = osThreadCreate(osThread(uart1Thread), NULL);
 	T_uart2Thread =	osThreadCreate(osThread(uart2Thread), NULL);
 	
